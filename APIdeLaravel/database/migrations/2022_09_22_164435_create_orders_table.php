@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign("site_id")->references("id")->on("sites")->onDelete("cascade")->onUpdate("cascade");
             $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade")->onUpdate("cascade");
             $table->foreign("pay_id")->references("id")->on("pays")->onDelete("cascade")->onUpdate("cascade");
+            $table->double('precio_total',10.2);
             $table->timestamps();
         });
     }

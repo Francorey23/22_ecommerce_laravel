@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegisterRequest;
-use TheSeer\Tokenizer\Token;
+use App\Models\Token;
+
 
 class AuthController extends Controller
 {
@@ -31,10 +32,30 @@ class AuthController extends Controller
             return response()->json([
                 'message'=> 'datos incorrectos',
                 'success'=> false
-            ]);
+            ],200);
         }
 
-        $userToken = Token::where('name',$request->email)->firts();
+        $userToken = Token::where('name',$request->email)->first();
+        $user = User::where('email',$request->email)->first();
+        if ($userToken) {
+            $userToken->delete();
+        }
+
+        return response()->json([
+            'success' => true,
+            'token' => $request->user()->createToken($request->email)->plainTextToken,
+            'id' => $user->id,
+            'nombre' => $user->name,
+        ]);
+    }
+
+    public function logout(Request $request){
+        //$request->user()->currentAccessToken()->delete();
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'cerrando sesion de usuario..',
+        ],410);
     }
     
 }

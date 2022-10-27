@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pays', function (Blueprint $table) {
+        Schema::create('product_images', function (Blueprint $table) {
             $table->id();
-            $table->string('metodo_pago',50);
+            $table->string('nombre',40);
+            $table->string('url',100);
+            $table->unsignedBigInteger('product_id');
+            $table->foreign("product_id")->references("id")->on("products")->onDelete("cascade")->onUpdate("cascade");
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pays');
+        Schema::dropIfExists('product_images');
     }
 };
